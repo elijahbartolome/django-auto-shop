@@ -1,0 +1,52 @@
+<style>
+    table, th, td {
+      border:1px solid black;
+    }
+</style>
+
+<body>
+<h1>Inquiry ID: {{ inquiry.id }}</h1>
+
+<ul>
+    <li>Customer Name: {{ inquiry.customer.name }}</li>
+    <li>VIN: {{ inquiry.vehicle.vin }}</li>
+    <li>Problem: {{ inquiry.problem }}</li>
+    <li>Vehicle Details:
+        <table>
+            <tr>
+                <td>Make</td>
+                <td>{{ inquiry.vehicle.make }}</td>
+            </tr>
+            <tr>
+                <td>Model</td>
+                <td>{{ inquiry.vehicle.model }}</td>
+            </tr>
+            <tr>
+                <td>Model Year</td>
+                <td>{{ inquiry.vehicle.year }}</td>
+            </tr>
+            <tr>
+                <td>Trim</td>
+                <td>{{ inquiry.vehicle.trim }}</td>
+            </tr>
+            <tr>
+                <td>Body Class</td>
+                <td>{{ inquiry.vehicle.body }}</td>
+            </tr>
+        </table>
+    </li>
+    <li>Part: {{ inquiry.vehicle.part }}</li>
+    <li>Labor: {{ inquiry.vehicle.labor }}</li>
+</ul>
+
+{% if inquiry.mech_approve_repair and inquiry.customer_approve_repair %}
+    <p>Approved!</p>
+{% elif inquiry.mech_approve_repair %}
+    <form action="{% url 'appointment:appointment_request' 1 inquiry.inquiry_id%}">
+    {% csrf_token %}
+        <button type="submit">Schedule Repair</button>
+    </form>
+{% else %}
+<p>The mechanic is still processing your inquiry.</p>
+{% endif %}
+</body>
